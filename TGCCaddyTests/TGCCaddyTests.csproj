@@ -59,6 +59,8 @@
     <Compile Include="ElevationAdjusterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TargetDistanceCalculatorTests.cs" />
+    <Compile Include="ShotResultListTests.cs" />
+    <Compile Include="ShotCalculatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

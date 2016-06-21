@@ -20,10 +20,6 @@ namespace TGCCaddy.Model
     /// </summary>
     public class ShotCalculator : IShotCalculator
     {
-        /// <summary>
-        /// Calculates the target distance
-        /// </summary>
-        private ITargetDistanceCalculator targetDistanceCalculator;
 
         /// <summary>
         /// Factory providing the wind adjuster for a shot type
@@ -36,28 +32,16 @@ namespace TGCCaddy.Model
         private IList<IClub> clubs;
 
         public ShotCalculator(IList<IClub> clubs,
-                              ITargetDistanceCalculator targetDistanceCalculator, 
                               IWindAdjusterFactory windAdjusterFactory)
         {
             this.clubs = clubs;
-            this.targetDistanceCalculator = targetDistanceCalculator;
             this.windAdjusterFactory = windAdjusterFactory;
         }
-
-        /// <summary>
-        /// Gets the distance to the target
-        /// </summary>
-        public int Distance { get; set; }
 
         /// <summary>
         /// Gets the elevation of the target
         /// </summary>
         public int Elevation { get; set; }
-
-        /// <summary>
-        /// gets the expected roll
-        /// </summary>
-        public int Roll { get; set; }
 
         /// <summary>
         /// Gets the wind speed
@@ -75,19 +59,12 @@ namespace TGCCaddy.Model
         public int MaximumDistance { get; set; }
 
         /// <summary>
-        /// gets the target distance
-        /// </summary>
-        public int TargetDistance { get; private set; }
-
-        /// <summary>
         /// Calculates the matches for the shot
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IShotResult> Calculate()
+        public IEnumerable<IShotResult> Calculate(int targetDistance)
         {
             InitializeWindFactory();
-            
-            var targetDistance = GetTargetDistance();
 
             var shotList = new ShotResultList(10);
 
@@ -109,22 +86,9 @@ namespace TGCCaddy.Model
         }
 
 
-        /// <summary>
-        /// Gets the target distance of the shot based on elevation and roll
-        /// </summary>
-        private int GetTargetDistance()
-        {
-            targetDistanceCalculator.Elevation = this.Elevation;
-            targetDistanceCalculator.Distance = this.Distance;
-            targetDistanceCalculator.Roll = this.Roll;
-
-            return targetDistanceCalculator.GetTargetDistance();
-            
-        }
-
         private IEnumerable<IShotResult> GetShotsForClub(IClub club, int targetDistance)
         {
-            var shotList = new ShotResultList(10);
+            var clubShotList = new ShotResultList(10);
 
             var shotTypes = Enum.GetValues(typeof(ShotType)).Cast<ShotType>();
             foreach (var shotType in shotTypes)
@@ -137,30 +101,32 @@ namespace TGCCaddy.Model
                 {
                     var methods = new Func<ShotType, int, int>[] {club.GetDistance, club.GetHalfDistance };
 
-                    foreach (var method in methods)
+                    for (int index = 0; index < methods.Length; index++)
                     {
+                        var method = methods[index];
                         var distance = method(shotType, i);
-
+                        var step = index == 1 ? i + 0.5d : i;
                         if (distance > 0)
                         {
                             var windAdjustedDistance = windAdjuster.GetWindAdjustedDistance(distance);
-
+                            var distanceToTarget = Math.Abs(windAdjustedDistance - targetDistance);
                             var result = new ShotResult()
                             {
                                 ClubName = club.Name,
-                                Step = i,
+                                Step = step,
                                 ShotType = shotType,
-                                Distance =  distance,
+                                Distance = distance,
                                 WindDistance = windAdjustedDistance,
-                                DistanceToTarget = targetDistance - windAdjustedDistance
+                                DistanceToTarget = distanceToTarget,
+                                IsWithinRange = distanceToTarget <= MaximumDistance
                             };
-                            shotList.AddCandidateShot(result);
-                        }                        
+                            clubShotList.AddCandidateShot(result);
+                        }
                     }
                 }
             }
 
-            return shotList.Shots;
+            return clubShotList.Shots;
         }
 
     }

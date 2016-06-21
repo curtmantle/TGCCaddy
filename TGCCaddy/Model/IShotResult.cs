@@ -10,7 +10,7 @@ namespace TGCCaddy.Model
         /// <summary>
         /// Gets the loft step
         /// </summary>
-        int Step { get; set; }
+        double Step { get; set; }
 
         /// <summary>
         /// Gets the shot type

@@ -4,6 +4,6 @@
         xmlns:view="clr-namespace:TGCCaddy.View"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <view:CalculatorView/>
+        <view:CalculatorView DataContext="{Binding}"/>
     </Grid>
 </Window>

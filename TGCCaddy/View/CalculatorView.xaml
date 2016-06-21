@@ -1,36 +1,46 @@
-﻿<UserControl xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+﻿<UserControl xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  x:Class="TGCCaddy.View.CalculatorView" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:model="clr-namespace:TGCCaddy.Model"
+             x:Class="TGCCaddy.View.CalculatorView" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="500">
     <Grid>
-        <dxlc:LayoutControl StretchContentHorizontally="True">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <dxlc:LayoutControl StretchContentHorizontally="True"
+                            StretchContentVertically="True">
+
             <dxlc:LayoutGroup Orientation="Vertical" >
                 <dxlc:LayoutGroup Header="Shot " View="GroupBox">
-                    <dxlc:LayoutGroup Orientation="Vertical"
-                                      >
-                        
+                    <dxlc:LayoutGroup Orientation="Vertical">
 
                         <dxlc:LayoutItem Label="Distance">
-                            <dxe:SpinEdit/>
+                            <dxe:SpinEdit EditValue="{Binding Distance, Mode=TwoWay}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Elevation">
-                            <dxe:SpinEdit/>
+                            <dxe:SpinEdit EditValue="{Binding Elevation, Mode=TwoWay}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Roll">
-                            <dxe:SpinEdit/>
+                            <dxe:SpinEdit EditValue="{Binding Roll, Mode=TwoWay}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Wind Speed">
-                            <dxe:SpinEdit/>
+                            <dxe:SpinEdit EditValue="{Binding WindSpeed, Mode=TwoWay}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Wind Direction">
-                            <dxe:SpinEdit/>
+                            <dxe:SpinEdit EditValue="{Binding WindDirection, Mode=TwoWay}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Lie Percent">
-                            <dxe:SpinEdit/>
+                            <dxe:SpinEdit EditValue="{Binding LiePercent, Mode=TwoWay}"/>
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
 
@@ -38,11 +48,36 @@
 
                 <dxlc:LayoutGroup Header="Options" View="GroupBox">
                     <dxlc:LayoutItem Label="Max Distance">
-                        <dxe:SpinEdit/>
+                        <dxe:SpinEdit EditValue="{Binding MaximumDistance, Mode=TwoWay}"/>
                     </dxlc:LayoutItem>
 
                 </dxlc:LayoutGroup>               
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
+        <dxlc:LayoutControl Grid.Column="1"
+                            Grid.Row="0"
+                            StretchContentVertically="True">
+            <dxlc:LayoutGroup Header="LayoutGroup" View="GroupBox" >
+
+                <dxg:GridControl ItemsSource="{Binding Results}"
+                                 DesignTimeDataObjectType="model:IShotResult">
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn FieldName="ClubName" IsSmart="True" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="Step" IsSmart="True" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="ShotType" IsSmart="True" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="Distance" IsSmart="True" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="WindDistance" IsSmart="True" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="DistanceToTarget" IsSmart="True" ReadOnly="True"/>
+                    </dxg:GridControl.Columns>
+
+                </dxg:GridControl>
+
+
+            </dxlc:LayoutGroup>
+
+        </dxlc:LayoutControl>
+        <Button Grid.Row="1"
+                Content="Calculate"
+                Command="{Binding CalculateCommand}"/>
     </Grid>
 </UserControl>

@@ -5,6 +5,7 @@ using TGCCaddy.Model;
 
 namespace TGCCaddyTests
 {
+
     [TestClass]
     public class TargetDistanceCalculatorTests
     {

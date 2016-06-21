@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TGCCaddy.ViewModel;
 
 namespace TGCCaddy
 {
@@ -20,9 +21,15 @@ namespace TGCCaddy
     /// </summary>
     public partial class MainWindow : Window
     {
+        private CalculatorViewModel vm;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            this.vm = new CalculatorViewModel();
+
+            this.DataContext = vm;
         }
     }
 }

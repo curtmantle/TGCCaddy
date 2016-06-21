@@ -62,51 +62,72 @@ namespace TGCCaddy.Model
 
         private void CheckInRangeShot(IShotResult shot)
         {
-            var shotList = new List<IShotResult>();
-
-            foreach (var shotResult in shots)
+            //if the shot is within range, remove all shots outside range
+            if (shot.IsWithinRange)
             {
-                if (shot.IsWithinRange && !shotResult.IsWithinRange)
+                var outOfRange = this.Shots.Where(x => x.IsWithinRange == false);
+                this.shots = this.Shots.Except(outOfRange).ToList();
+            }
+            var count = this.shots.Count;
+            int insertPos = count;
+
+            //now insert shot 
+            if (count > 0)
+            {
+
+                for (int i = 0; i < shots.Count; i++)
                 {
-                    shotList.Add(shot);
-                }
-                else if (shot.IsWithinRange && shot.DistanceToTarget < shotResult.DistanceToTarget)
-                {
-                    shotList.Add(shot);
-                    shotList.Add(shotResult);
-                }
-                else if (shot.DistanceToTarget == shotResult.DistanceToTarget)
-                {
-                    shotList.Add(shotResult);
-                    shotList.Add(shot);
-                }
-                else
-                {
-                    shotList.Add(shotResult);
+                    var shotResult = shots[i];
+                    if (shot.DistanceToTarget < shotResult.DistanceToTarget)
+                    {
+                        insertPos = i;
+                    }
+                    else if (shot.DistanceToTarget == shotResult.DistanceToTarget)
+                    {
+                        insertPos = i + 1;
+                    }
+
                 }
             }
-            this.shots = shotList.Take(this.maximumShots).ToList();
+
+            if (insertPos == count)
+            {
+                this.shots.Add(shot);
+            }
+            else
+            {
+                this.Shots.Insert(insertPos, shot);
+            }
+
+            this.shots = shots.Take(this.maximumShots).ToList();
         }
 
         private void CheckOutOfRangeShot(IShotResult shot)
         {
             if (!shot.IsWithinRange)
             {
-                foreach (var shotResult in Shots)
+                if (shots.Count > 0)
                 {
-                    if (!shotResult.IsWithinRange)
+                    foreach (var shotResult in Shots)
                     {
-                        if (shot.DistanceToTarget < shotResult.DistanceToTarget)
+                        if (!shotResult.IsWithinRange)
                         {
-                            this.shots = new List<IShotResult>() { shot };
-                            return;
-                        }
-                        else if (shot.DistanceToTarget == shotResult.DistanceToTarget)
-                        {
-                            this.Shots.Add(shot);
-                            return;
+                            if (shot.DistanceToTarget < shotResult.DistanceToTarget)
+                            {
+                                this.shots = new List<IShotResult>() { shot };
+                                return;
+                            }
+                            else if (shot.DistanceToTarget == shotResult.DistanceToTarget)
+                            {
+                                this.Shots.Add(shot);
+                                return;
+                            }
                         }
                     }
+                }
+                else
+                {
+                    this.shots.Add(shot);
                 }
             }
         }

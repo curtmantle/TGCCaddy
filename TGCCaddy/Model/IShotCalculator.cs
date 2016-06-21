@@ -5,19 +5,9 @@ namespace TGCCaddy.Model
     public interface IShotCalculator
     {
         /// <summary>
-        /// Gets the distance to the target
-        /// </summary>
-        int Distance { get; set; }
-
-        /// <summary>
         /// Gets the elevation of the target
         /// </summary>
         int Elevation { get; set; }
-
-        /// <summary>
-        /// gets the expected roll
-        /// </summary>
-        int Roll { get; set; }
 
         /// <summary>
         /// Gets the wind speed
@@ -35,14 +25,9 @@ namespace TGCCaddy.Model
         int MaximumDistance { get; set; }
 
         /// <summary>
-        /// gets the target distance
-        /// </summary>
-        int TargetDistance { get; }
-
-        /// <summary>
         /// Calculates the matches for the shot
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IShotResult> Calculate();
+        IEnumerable<IShotResult> Calculate(int targetDistance);
     }
 }

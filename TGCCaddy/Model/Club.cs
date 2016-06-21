@@ -12,6 +12,7 @@ namespace TGCCaddy.Model
         public Club(string name)
         {
             this.Name = name;
+            this.shotDistances = new Dictionary<ShotType, IList<int>>();
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace TGCCaddy.Model
 
                 if (stepBefore >= 0 && stepBefore < (steps.Count - 1))
                 {
-                    return steps[stepBefore] + (steps[stepBefore + 1] - steps[stepBefore]/2);
+                    return steps[stepBefore] + ((steps[stepBefore + 1] - steps[stepBefore])/2);
                 }
             }
             return 0;
