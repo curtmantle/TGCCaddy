@@ -1,9 +1,14 @@
-﻿<Window x:Class="TGCCaddy.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:view="clr-namespace:TGCCaddy.View"
-        Title="MainWindow" Height="350" Width="525">
+﻿<dx:DXWindow
+	xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:view="clr-namespace:TGCCaddy.View"
+	x:Class="TGCCaddy.MainWindow"
+	Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <view:CalculatorView DataContext="{Binding}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="199*"/>
+            <ColumnDefinition Width="61*"/>
+        </Grid.ColumnDefinitions>
+        <view:CalculatorView DataContext="{Binding}" Grid.ColumnSpan="2" Margin="0,0,0,0.5"/>
     </Grid>
-</Window>
+</dx:DXWindow>

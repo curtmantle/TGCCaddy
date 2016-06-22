@@ -14,8 +14,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="155*"/>
+            <ColumnDefinition Width="46*"/>
         </Grid.ColumnDefinitions>
         <dxlc:LayoutControl StretchContentHorizontally="True"
                             StretchContentVertically="True">
@@ -51,12 +52,12 @@
                         <dxe:SpinEdit EditValue="{Binding MaximumDistance, Mode=TwoWay}"/>
                     </dxlc:LayoutItem>
 
-                </dxlc:LayoutGroup>               
+                </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
         <dxlc:LayoutControl Grid.Column="1"
                             Grid.Row="0"
-                            StretchContentVertically="True">
+                            StretchContentVertically="True" Grid.ColumnSpan="2">
             <dxlc:LayoutGroup Header="LayoutGroup" View="GroupBox" >
 
                 <dxg:GridControl ItemsSource="{Binding Results}"

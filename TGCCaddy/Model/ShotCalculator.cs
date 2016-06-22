@@ -105,6 +105,7 @@ namespace TGCCaddy.Model
                     {
                         var method = methods[index];
                         var distance = method(shotType, i);
+
                         var step = index == 1 ? i + 0.5d : i;
                         if (distance > 0)
                         {
