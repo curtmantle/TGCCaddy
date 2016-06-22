@@ -7,7 +7,8 @@
              xmlns:model="clr-namespace:TGCCaddy.Model"
              x:Class="TGCCaddy.View.CalculatorView" 
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="500">
+             d:DesignHeight="400" d:DesignWidth="800"
+             FocusManager.FocusedElement="{Binding ElementName=distanceSpinEdit}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -26,22 +27,47 @@
                     <dxlc:LayoutGroup Orientation="Vertical">
 
                         <dxlc:LayoutItem Label="Distance">
-                            <dxe:SpinEdit EditValue="{Binding Distance, Mode=TwoWay}"/>
+                            <dxe:SpinEdit x:Name="distanceSpinEdit"
+                                          EditValue="{Binding Distance, Mode=TwoWay}" 
+                                          MaxValue="500" 
+                                          MinValue="0" 
+                                          Mask="n0" 
+                                          MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Elevation">
-                            <dxe:SpinEdit EditValue="{Binding Elevation, Mode=TwoWay}"/>
+                            <dxe:SpinEdit EditValue="{Binding Elevation, Mode=TwoWay}"
+                                          MaxValue="999"
+                                          MinValue="-999"
+                                          Mask="n0"
+                                          MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Roll">
-                            <dxe:SpinEdit EditValue="{Binding Roll, Mode=TwoWay}"/>
+                            <dxe:SpinEdit EditValue="{Binding Roll, Mode=TwoWay}"
+                                          MaxValue="999"
+                                          MinValue="-999"
+                                          Mask="n0"
+                                          MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Wind Speed">
-                            <dxe:SpinEdit EditValue="{Binding WindSpeed, Mode=TwoWay}"/>
+                            <dxe:SpinEdit EditValue="{Binding WindSpeed, Mode=TwoWay}"
+                                          MaxValue="100"
+                                          MinValue="0"
+                                          Mask="n0"
+                                          MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Wind Direction">
-                            <dxe:SpinEdit EditValue="{Binding WindDirection, Mode=TwoWay}"/>
+                            <dxe:SpinEdit EditValue="{Binding WindDirection, Mode=TwoWay}"
+                                          MaxValue="59"
+                                          MinValue="0"
+                                          Mask="n0"
+                                          MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Lie Percent">
-                            <dxe:SpinEdit EditValue="{Binding LiePercent, Mode=TwoWay}"/>
+                            <dxe:SpinEdit EditValue="{Binding LiePercent, Mode=TwoWay}"
+                                          MaxValue="1"
+                                          MinValue="0" 
+                                          Mask="p0"
+                                          MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
 
@@ -49,7 +75,12 @@
 
                 <dxlc:LayoutGroup Header="Options" View="GroupBox">
                     <dxlc:LayoutItem Label="Max Distance">
-                        <dxe:SpinEdit EditValue="{Binding MaximumDistance, Mode=TwoWay}"/>
+                        
+                        <dxe:SpinEdit EditValue="{Binding MaximumDistance, Mode=TwoWay}"
+                                      MaxValue="100"
+                                      MinValue="0"
+                                      Mask="n0"
+                                      MaskUseAsDisplayFormat="True"/>
                     </dxlc:LayoutItem>
 
                 </dxlc:LayoutGroup>
@@ -58,22 +89,42 @@
         <dxlc:LayoutControl Grid.Column="1"
                             Grid.Row="0"
                             StretchContentVertically="True" Grid.ColumnSpan="2">
-            <dxlc:LayoutGroup Header="LayoutGroup" View="GroupBox" >
-
+            <dxlc:LayoutGroup Header="Results" View="GroupBox" Orientation="Vertical" >
+                <dxlc:LayoutItem Label="Target Distance">
+                    <dxe:TextEdit EditValue="{Binding TargetDistance, Mode=OneWay}" 
+                                  IsReadOnly="True" 
+                                  Focusable="False"/>
+                </dxlc:LayoutItem>
                 <dxg:GridControl ItemsSource="{Binding Results}"
+                                 SelectionMode="Row"
                                  DesignTimeDataObjectType="model:IShotResult">
                     <dxg:GridControl.Columns>
-                        <dxg:GridColumn FieldName="ClubName" IsSmart="True" ReadOnly="True"/>
-                        <dxg:GridColumn FieldName="Step" IsSmart="True" ReadOnly="True"/>
-                        <dxg:GridColumn FieldName="ShotType" IsSmart="True" ReadOnly="True"/>
-                        <dxg:GridColumn FieldName="Distance" IsSmart="True" ReadOnly="True"/>
-                        <dxg:GridColumn FieldName="WindDistance" IsSmart="True" ReadOnly="True"/>
-                        <dxg:GridColumn FieldName="DistanceToTarget" IsSmart="True" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="ClubName" 
+                                        IsSmart="True" 
+                                        ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="Step" 
+                                        Width="50"
+                                        IsSmart="True" 
+                                        ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="ShotType" 
+                                        Width="100"
+                                        IsSmart="True" 
+                                        ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="Distance" 
+                                        Width="80"
+                                        IsSmart="True" 
+                                        ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="WindDistance" 
+                                        Width="100"
+                                        IsSmart="True" 
+                                        ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="DistanceToTarget" 
+                                        Width="120"
+                                        IsSmart="True" 
+                                        ReadOnly="True"/>
                     </dxg:GridControl.Columns>
 
                 </dxg:GridControl>
-
-
             </dxlc:LayoutGroup>
 
         </dxlc:LayoutControl>

@@ -1,4 +1,6 @@
-﻿namespace TGCCaddy.Model
+﻿using System;
+
+namespace TGCCaddy.Model
 {
     /// <summary>
     /// Calculates the target distance
@@ -32,12 +34,21 @@
         public int Roll { get; set; }
 
         /// <summary>
+        /// The percentage of full lie
+        /// </summary>
+        public double LiePercent { get; set; }
+
+        /// <summary>
         /// Gets the target distance
         /// </summary>
         /// <returns></returns>
         public int GetTargetDistance()
         {
-            return this.Distance - this.Roll + elevationAdjuster.GetAdjustedDistance();
+            var distanceWithRoll = this.Distance - this.Roll;
+            var distanceLost = distanceWithRoll - (int)Math.Round(distanceWithRoll*LiePercent,0);
+
+            var distanceAdjustedForLie = distanceWithRoll + distanceLost;
+            return distanceAdjustedForLie + elevationAdjuster.GetAdjustedDistance();
         }
     }
 }

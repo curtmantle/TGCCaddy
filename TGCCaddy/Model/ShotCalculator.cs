@@ -24,12 +24,12 @@ namespace TGCCaddy.Model
         /// <summary>
         /// Factory providing the wind adjuster for a shot type
         /// </summary>
-        private IWindAdjusterFactory windAdjusterFactory;
+        private readonly IWindAdjusterFactory windAdjusterFactory;
 
         /// <summary>
         /// List of the clubs
         /// </summary>
-        private IList<IClub> clubs;
+        private readonly IList<IClub> clubs;
 
         public ShotCalculator(IList<IClub> clubs,
                               IWindAdjusterFactory windAdjusterFactory)
@@ -37,21 +37,6 @@ namespace TGCCaddy.Model
             this.clubs = clubs;
             this.windAdjusterFactory = windAdjusterFactory;
         }
-
-        /// <summary>
-        /// Gets the elevation of the target
-        /// </summary>
-        public int Elevation { get; set; }
-
-        /// <summary>
-        /// Gets the wind speed
-        /// </summary>
-        public int WindSpeed { get; set; }
-
-        /// <summary>
-        /// Gets or sets the direction of the wind
-        /// </summary>
-        public int WindDirection { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum distance to target of results
@@ -64,7 +49,6 @@ namespace TGCCaddy.Model
         /// <returns></returns>
         public IEnumerable<IShotResult> Calculate(int targetDistance)
         {
-            InitializeWindFactory();
 
             var shotList = new ShotResultList(10);
 
@@ -76,13 +60,6 @@ namespace TGCCaddy.Model
             }
 
             return shotList.Shots;
-        }
-
-        private void InitializeWindFactory()
-        {
-            this.windAdjusterFactory.Elevation = this.Elevation;
-            this.windAdjusterFactory.WindSpeed = this.WindSpeed;
-            this.windAdjusterFactory.WindDirection = this.WindDirection;
         }
 
 
@@ -97,11 +74,11 @@ namespace TGCCaddy.Model
 
                 var stepCount = club.GetStepCountForShotType(shotType);
 
-                for (int i = 0; i < stepCount; i++)
+                for (var i = 0; i < stepCount; i++)
                 {
                     var methods = new Func<ShotType, int, int>[] {club.GetDistance, club.GetHalfDistance };
 
-                    for (int index = 0; index < methods.Length; index++)
+                    for (var index = 0; index < methods.Length; index++)
                     {
                         var method = methods[index];
                         var distance = method(shotType, i);

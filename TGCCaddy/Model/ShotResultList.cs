@@ -62,44 +62,22 @@ namespace TGCCaddy.Model
 
         private void CheckInRangeShot(IShotResult shot)
         {
-            //if the shot is within range, remove all shots outside range
-            if (shot.IsWithinRange)
+            if (!shot.IsWithinRange)
             {
-                var outOfRange = this.Shots.Where(x => x.IsWithinRange == false);
-                this.shots = this.Shots.Except(outOfRange).ToList();
-            }
-            var count = this.shots.Count;
-            int insertPos = count;
-
-            //now insert shot 
-            if (count > 0)
-            {
-
-                for (int i = 0; i < shots.Count; i++)
-                {
-                    var shotResult = shots[i];
-                    if (shot.DistanceToTarget < shotResult.DistanceToTarget)
-                    {
-                        insertPos = i;
-                    }
-                    else if (shot.DistanceToTarget == shotResult.DistanceToTarget)
-                    {
-                        insertPos = i + 1;
-                    }
-
-                }
+                CheckOutOfRangeShot(shot);
             }
 
-            if (insertPos == count)
-            {
-                this.shots.Add(shot);
-            }
-            else
-            {
-                this.Shots.Insert(insertPos, shot);
-            }
+            RemoveOutOfRangeShots();
 
-            this.shots = shots.Take(this.maximumShots).ToList();
+            this.shots.Add(shot);
+            this.shots = this.shots.OrderBy(x => x.DistanceToTarget).Take(maximumShots).ToList();
+
+        }
+
+        private void RemoveOutOfRangeShots()
+        {
+            var outOfRange = this.Shots.Where(x => x.IsWithinRange == false);
+            this.shots = this.Shots.Except(outOfRange).ToList();
         }
 
         private void CheckOutOfRangeShot(IShotResult shot)

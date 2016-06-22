@@ -15,19 +15,21 @@ namespace TGCCaddy.ViewModel
     {
         private IShotCalculator shotCalculator;
         private ObservableCollection<IShotResult> results;
-
+        private IList<IClub> clubs;
 
         private DelegateCommand calculateCommand;
-        private int _distance;
-        private int _elevation;
-        private int _roll;
-        private int _windSpeed;
-        private int _windDirection;
-        private int _maximumDistance;
+        private int distance;
+        private int roll;
+        private IWindAdjusterFactory windAdjusterFactory;
+        private double liePercent;
+        private int targetDistance;
 
         public CalculatorViewModel()
         {
+            CreateClubs();
+            CreateWindFactory();
             CreateCalculator();
+            LiePercent = 1;
         }
 
         public CalculatorViewModel(IShotCalculator calculator)
@@ -40,10 +42,10 @@ namespace TGCCaddy.ViewModel
         /// </summary>
         public int Distance
         {
-            get { return _distance; }
+            get { return distance; }
             set
             {
-                _distance = value;
+                distance = value;
                 RaisePropertyChanged(()=>Distance);
             }
         }
@@ -53,10 +55,10 @@ namespace TGCCaddy.ViewModel
         /// </summary>
         public int Elevation
         {
-            get { return _elevation; }
+            get { return this.windAdjusterFactory.Elevation; }
             set
             {
-                _elevation = value; 
+                this.windAdjusterFactory.Elevation = value; 
                 RaisePropertyChanged(()=>Elevation);
             }
         }
@@ -66,10 +68,10 @@ namespace TGCCaddy.ViewModel
         /// </summary>
         public int Roll
         {
-            get { return _roll; }
+            get { return roll; }
             set
             {
-                _roll = value;
+                roll = value;
                 RaisePropertyChanged(()=>Roll);
             }
         }
@@ -79,10 +81,10 @@ namespace TGCCaddy.ViewModel
         /// </summary>
         public int WindSpeed
         {
-            get { return _windSpeed; }
+            get { return this.windAdjusterFactory.WindSpeed; }
             set
             {
-                _windSpeed = value; 
+                this.windAdjusterFactory.WindSpeed = value; 
                 RaisePropertyChanged(()=>WindSpeed);
 
             }
@@ -93,21 +95,11 @@ namespace TGCCaddy.ViewModel
         /// </summary>
         public int WindDirection
         {
-            get { return _windDirection; }
+            get { return this.windAdjusterFactory.WindDirection; }
             set
             {
-                _windDirection = value;
+                this.windAdjusterFactory.WindDirection = value;
                 RaisePropertyChanged(()=>WindDirection);
-            }
-        }
-
-        public ObservableCollection<IShotResult> Results
-        {
-            get { return this.results ?? (this.results = new ObservableCollection<IShotResult>()); }
-            private set
-            {
-                this.results = value;
-                RaisePropertyChanged(()=>Results);
             }
         }
 
@@ -125,46 +117,112 @@ namespace TGCCaddy.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets the lie percent
+        /// </summary>
+        public double LiePercent
+        {
+            get { return this.liePercent; }
+            set
+            {
+                this.liePercent = value;
+                RaisePropertyChanged(()=>LiePercent);
+            }
+        }
+
+        /// <summary>
+        /// Gets the calulated target distance
+        /// </summary>
+        public int TargetDistance
+        {
+            get { return targetDistance; }
+            private set
+            {
+                targetDistance = value; 
+                RaisePropertyChanged(()=>TargetDistance);
+            }
+        }
+
+        /// <summary>
+        /// Gets the results of the latest calculation
+        /// </summary>
+        public ObservableCollection<IShotResult> Results
+        {
+            get { return this.results ?? (this.results = new ObservableCollection<IShotResult>()); }
+            private set
+            {
+                this.results = value;
+                RaisePropertyChanged(()=>Results);
+            }
+        }
+
+        /// <summary>
+        /// Command for calculation
+        /// </summary>
         public DelegateCommand CalculateCommand
         {
             get { return this.calculateCommand ?? (this.calculateCommand = new DelegateCommand(Calculate)); }
         }
 
-        private void CreateCalculator()
+        /// <summary>
+        /// Creates the clubs
+        /// </summary>
+        private void CreateClubs()
         {
             var clubGenerator = new ClubGenerator();
-            var clubs = clubGenerator.GetClubs();
+            this.clubs = clubGenerator.GetClubs();
+        }
 
-            var windAdjusterFactory = new WindAdjusterFactory();
+        /// <summary>
+        /// Creates the calculator
+        /// </summary>
+        private void CreateCalculator()
+        {
 
-            this.shotCalculator = new ShotCalculator(clubs, windAdjusterFactory);
+            this.shotCalculator = new ShotCalculator(this.clubs, this.windAdjusterFactory);
             shotCalculator.MaximumDistance = 2;
         }
 
+        /// <summary>
+        /// Creates the wind factory
+        /// </summary>
+        private void CreateWindFactory()
+        {
+            this.windAdjusterFactory = new WindAdjusterFactory();
+        }
+
+        /// <summary>
+        /// Calculates
+        /// </summary>
         public void Calculate()
+        {
+            TargetDistance = GetTargetDistance();
+            
+            var result = this.shotCalculator.Calculate(TargetDistance);
+
+            this.Results = new ObservableCollection<IShotResult>(result);
+
+            this.LiePercent = 1;
+        }
+
+        /// <summary>
+        /// Gets the target distance
+        /// </summary>
+        /// <returns></returns>
+        private int GetTargetDistance()
         {
             var elevationAdjuster = new ElevationAdjuster(0.27);
 
-            var targetDistance = GetTargetDistance(elevationAdjuster);
+            var targetDistanceCalculator = new TargetDistanceCalculator(elevationAdjuster)
+            {
+                Elevation = this.Elevation,
+                Distance = this.Distance,
+                Roll = this.Roll,
+                LiePercent =  this.LiePercent
+            };
 
-            shotCalculator.Elevation = this.Elevation;
-            shotCalculator.MaximumDistance = this.MaximumDistance;
-            shotCalculator.WindSpeed = this.WindSpeed;
-            shotCalculator.WindDirection = this.WindDirection;
-            
-            var result = this.shotCalculator.Calculate(targetDistance);
+            return targetDistanceCalculator.GetTargetDistance();
 
-            this.Results = new ObservableCollection<IShotResult>(result);
-        }
-
-        private int GetTargetDistance(ElevationAdjuster elevationAdjuster)
-        {
-            var targetDistanceCalculator = new TargetDistanceCalculator(elevationAdjuster);
-            targetDistanceCalculator.Elevation = this.Elevation;
-            targetDistanceCalculator.Distance = this.Distance;
-            targetDistanceCalculator.Roll = this.Roll;
-            var targetDistance = targetDistanceCalculator.GetTargetDistance();
-            return targetDistance;
         }
     }
 }
