@@ -13,6 +13,11 @@ namespace TGCCaddy.Model
             this.Multiplier = multiplier;
         }
 
+        public ElevationAdjuster() : this(0.27)
+        {
+
+        }
+
         /// <summary>
         /// Gets or sets the elevation
         /// </summary>

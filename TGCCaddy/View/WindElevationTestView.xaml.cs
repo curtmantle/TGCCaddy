@@ -12,24 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TGCCaddy.ViewModel;
 
-namespace TGCCaddy
+namespace TGCCaddy.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for WindElevationTestView.xaml
     /// </summary>
-    public partial class MainWindow : DevExpress.Xpf.Core.DXWindow
+    public partial class WindElevationTestView : UserControl
     {
-        private CalculatorViewModel vm;
-        private ElevationWindTestViewModel windTest;
-        public MainWindow()
+        public WindElevationTestView()
         {
             InitializeComponent();
-            this.windTest = new ElevationWindTestViewModel();
-            this.vm = new CalculatorViewModel();
-
-            this.DataContext = vm;
         }
     }
 }

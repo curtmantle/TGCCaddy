@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:model="clr-namespace:TGCCaddy.Model"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              x:Class="TGCCaddy.View.CalculatorView" 
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="800"
@@ -29,6 +30,7 @@
                         <dxlc:LayoutItem Label="Distance">
                             <dxe:SpinEdit x:Name="distanceSpinEdit"
                                           EditValue="{Binding Distance, Mode=TwoWay}" 
+                                          EditValueType="{x:Type system:Int32}"
                                           MaxValue="500" 
                                           MinValue="0" 
                                           Mask="n0" 
@@ -36,6 +38,7 @@
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Elevation">
                             <dxe:SpinEdit EditValue="{Binding Elevation, Mode=TwoWay}"
+                                          EditValueType="{x:Type system:Int32}"
                                           MaxValue="999"
                                           MinValue="-999"
                                           Mask="n0"
@@ -50,6 +53,7 @@
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Wind Speed">
                             <dxe:SpinEdit EditValue="{Binding WindSpeed, Mode=TwoWay}"
+                                          EditValueType="{x:Type system:Int32}"
                                           MaxValue="100"
                                           MinValue="0"
                                           Mask="n0"
@@ -57,6 +61,7 @@
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Wind Direction">
                             <dxe:SpinEdit EditValue="{Binding WindDirection, Mode=TwoWay}"
+                                          EditValueType="{x:Type system:Int32}"
                                           MaxValue="59"
                                           MinValue="0"
                                           Mask="n0"
@@ -73,7 +78,7 @@
 
                 </dxlc:LayoutGroup>
 
-                <dxlc:LayoutGroup Header="Options" View="GroupBox">
+                <dxlc:LayoutGroup Header="Options" View="GroupBox" Orientation="Vertical">
                     <dxlc:LayoutItem Label="Max Distance">
                         
                         <dxe:SpinEdit EditValue="{Binding MaximumDistance, Mode=TwoWay}"
@@ -81,6 +86,9 @@
                                       MinValue="0"
                                       Mask="n0"
                                       MaskUseAsDisplayFormat="True"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Use Elevation for wind">
+                        <dxe:CheckEdit IsChecked="{Binding UseWindElevation}"/>
                     </dxlc:LayoutItem>
 
                 </dxlc:LayoutGroup>

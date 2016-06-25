@@ -7,7 +7,7 @@ namespace TGCCaddy.Model
     {
         #region Static lookups
 
-        private static int[,] distanceRanges =
+        private static readonly int[,] distanceRanges =
         {
             {0, 75},
             {76, 95},
@@ -22,7 +22,7 @@ namespace TGCCaddy.Model
             {207, 500}
         };
 
-        private static IList<double[]> windPecentages = new List<double[]>
+        private static readonly IList<double[]> windPecentages = new List<double[]>
         {
             new[] {0.5, 0.4, 0.25, -0.1, -0.5, -0.75, -1},
             new[] {0.7, 0.6, 0.25, -0.2, -0.6, -1.2, -1.4},
@@ -58,17 +58,47 @@ namespace TGCCaddy.Model
 
         #endregion
 
-
         public NormalShotWindAdjuster(int elevation, int windSpeed, int windDirection)
         {
             this.Elevation = elevation;
             this.WindSpeed = windSpeed;
             this.WindDirection = windDirection;
-
+            this.AdjustForElevation = true;
             CreatePercentages();
         }
 
+
+        /// <summary>
+        /// Get Elevation 
+        /// </summary>
+        public int Elevation { get; set; }
+
+        /// <summary>
+        /// Get Windspeed
+        /// </summary>
+        public int WindSpeed { get; set; }
+
+        /// <summary>
+        /// Get Wind Direction
+        /// </summary>
+        public int WindDirection { get; set; }
+
+        /// <summary>
+        /// Determines whether the wind is affected by elevation
+        /// </summary>
+        public bool AdjustForElevation { get; set; }
+
         public int GetWindAdjustedDistance(int distance)
+        {
+            return distance + GetWindDistance(distance);
+        }
+
+        /// <summary>
+        /// Gets the adjusted wind distance
+        /// </summary>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        public int GetWindDistance(int distance)
         {
             var clockIndex = GetClockIndex();
 
@@ -78,19 +108,31 @@ namespace TGCCaddy.Model
                     distance <= windPecentage.UpperValue)
                 {
                     var multiplier = windPecentage.Percentages[clockIndex];
-
-                    return distance + (int)Math.Round(this.WindSpeed*multiplier,0);
+                    var windEffect = (int)Math.Round(this.WindSpeed*multiplier,0);
+                    var elevatedWindEffect = GetElevationAdjustement(windEffect);
+                    return elevatedWindEffect;
                 }
             }
 
-            return distance;
+            return 0;
         }
 
-        public int Elevation { get; set; }
-
-        public int WindSpeed { get; set; }
-
-        public int WindDirection { get; set; }
+        /// <summary>
+        /// Gets the adjustment for elevation
+        /// </summary>
+        /// <param name="windEffect"></param>
+        /// <returns></returns>
+        private int GetElevationAdjustement(int windEffect)
+        {
+            if (AdjustForElevation)
+            {
+                if (this.Elevation < 0 && windEffect > 0)
+                {
+                    return (int)Math.Round(windEffect * 1.2, 0);
+                }
+            }
+            return windEffect;
+        }
 
         private void CreatePercentages()
         {

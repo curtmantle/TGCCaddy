@@ -23,6 +23,7 @@ namespace TGCCaddy.ViewModel
         private IWindAdjusterFactory windAdjusterFactory;
         private double liePercent;
         private int targetDistance;
+        private bool useWindElevation;
 
         public CalculatorViewModel()
         {
@@ -140,6 +141,16 @@ namespace TGCCaddy.ViewModel
             {
                 targetDistance = value; 
                 RaisePropertyChanged(()=>TargetDistance);
+            }
+        }
+
+        public bool UseWindElevation
+        {
+            get { return useWindElevation; }
+            set
+            {
+                useWindElevation = value; 
+                RaisePropertyChanged(()=>UseWindElevation);
             }
         }
 

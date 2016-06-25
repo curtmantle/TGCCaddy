@@ -74,21 +74,30 @@
     </ApplicationDefinition>
     <Compile Include="Model\Club.cs" />
     <Compile Include="Model\ClubGenerator.cs" />
+    <Compile Include="Model\ElevationWindResult.cs" />
+    <Compile Include="Model\ElevationWindTester.cs" />
     <Compile Include="Model\IClub.cs" />
     <Compile Include="Model\IClubGenerator.cs" />
+    <Compile Include="Model\IElevationWindResult.cs" />
+    <Compile Include="Model\IElevationWindTester.cs" />
     <Compile Include="Model\IShotCalculator.cs" />
     <Compile Include="Model\IShotResult.cs" />
     <Compile Include="Model\IShotResultList.cs" />
     <Compile Include="Model\IWindAdjuster.cs" />
     <Compile Include="Model\IWindAdjusterFactory.cs" />
     <Compile Include="Model\NormalShotWindAdjuster.cs" />
+    <Compile Include="Model\NullShotWindAdjuster.cs" />
     <Compile Include="Model\ShotCalculator.cs" />
     <Compile Include="Model\ShotResult.cs" />
     <Compile Include="Model\ShotResultList.cs" />
     <Compile Include="Model\WindAdjusterFactory.cs" />
     <Compile Include="ViewModel\CalculatorViewModel.cs" />
+    <Compile Include="ViewModel\ElevationWindTestViewModel.cs" />
     <Compile Include="View\CalculatorView.xaml.cs">
       <DependentUpon>CalculatorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WindElevationTestView.xaml.cs">
+      <DependentUpon>WindElevationTestView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -103,6 +112,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\CalculatorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WindElevationTestView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

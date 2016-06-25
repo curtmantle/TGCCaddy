@@ -3,12 +3,9 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:view="clr-namespace:TGCCaddy.View"
 	x:Class="TGCCaddy.MainWindow"
-	Title="TGC Caddy" Height="500" Width="1000" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" BorderEffect="Default">
+	Title="TGC Caddy" Height="500" Width="1200" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" BorderEffect="Default">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="199*"/>
-            <ColumnDefinition Width="61*"/>
-        </Grid.ColumnDefinitions>
-        <view:CalculatorView DataContext="{Binding}" Grid.ColumnSpan="2" Margin="0,0,0,0.5"/>
+        <view:CalculatorView DataContext="{Binding}"/>
+        <!--<view:WindElevationTestView DataContext="{Binding}" />-->
     </Grid>
 </dx:DXWindow>

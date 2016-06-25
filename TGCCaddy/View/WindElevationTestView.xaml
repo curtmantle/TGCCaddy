@@ -1,0 +1,96 @@
+﻿<UserControl xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:model="clr-namespace:TGCCaddy.Model"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             x:Class="TGCCaddy.View.WindElevationTestView" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <dxlc:LayoutControl Orientation="Vertical" >
+            <dxlc:LayoutGroup Header="Shot" View="GroupBox" Orientation="Vertical">
+                <dxlc:LayoutItem Label="Club">
+                    <dxe:ComboBoxEdit ItemsSource="{Binding ClubLookup}"
+                                      DisplayMember="Name"
+                                      SelectedItem="{Binding SelectedClub}"/>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Shot Type">
+                    <dxe:ComboBoxEdit ItemsSource="{Binding ShotTypes}"
+                                      DisplayMember="Name"
+                                      SelectedItem="{Binding SelectedShotType}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Step">
+                    <dxe:SpinEdit EditValue="{Binding Step, Mode=TwoWay}"
+                                  EditValueType="{x:Type system:Int32}"
+                                  MaxValue="10"
+                                  MinValue="0"
+                                  Increment="1" Mask="n0" />
+                </dxlc:LayoutItem>                
+                <dxlc:LayoutItem Label="Elevation">
+                    <dxe:SpinEdit EditValue="{Binding Elevation, Mode=TwoWay}"
+                                  EditValueType="{x:Type system:Int32}"
+                                  MinValue="-200"
+                                  MaxValue="200"
+                                  Increment="1" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wind Speed">
+                    <dxe:SpinEdit EditValue="{Binding WindSpeed, Mode=TwoWay}"
+                                  EditValueType="{x:Type system:Int32}"
+                                  MinValue="0"
+                                  MaxValue="100"
+                                  Increment="1" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wind Direction">
+                    <dxe:SpinEdit EditValue="{Binding WindDirection, Mode=TwoWay}"
+                                  EditValueType="{x:Type system:Int32}"
+                                  MinValue="0"
+                                  MaxValue="59"
+                                  Increment="1" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Carry Distance">
+                    <dxe:SpinEdit EditValue="{Binding CarryDistance}"
+                                  EditValueType="{x:Type system:Int32}"
+                                  MinValue="0"
+                                  MaxValue="500"
+                                  Increment="1" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem >
+                    <Button Content="Calculate"
+                            Command="{Binding CalculateCommand}"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutItem>
+                <Button Content="Clear" Command="{Binding ClearCommand}"/>
+            </dxlc:LayoutItem>
+        </dxlc:LayoutControl>
+        <dxg:GridControl ItemsSource="{Binding Results}"
+                         
+                         Grid.Column="1"
+                         DesignTimeDataObjectType="model:IElevationWindResult" SelectionMode="Row">
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="ClubName" IsSmart="True"/>                
+                <dxg:GridColumn FieldName="Step" IsSmart="True" Width="40" ReadOnly="True"/>             
+                <dxg:GridColumn FieldName="WindDirection" IsSmart="True" Header="Wind Dir" Width="60"/>
+                <dxg:GridColumn FieldName="WindSpeed" IsSmart="True" Header="Wind Spd" Width="65"/>
+                <dxg:GridColumn FieldName="ExpectedDistance" IsSmart="True" Header="Exp Dist" Width="70" ReadOnly="True"/>
+                <dxg:GridColumn FieldName="ActualDistance" IsSmart="True" Header="Act Dist" Width="70" ReadOnly="True"/>                
+                <dxg:GridColumn FieldName="ExpectedWindDistance" IsSmart="True" Header="Exp Wnd Dist" Width="90" ReadOnly="True"/>
+                <dxg:GridColumn FieldName="ActualWindDistance" IsSmart="True" Header="Act Wnd Dist" Width="90" ReadOnly="True"/>
+                <dxg:GridColumn FieldName="Difference" IsSmart="True" Header="Diff" Width="60" ReadOnly="True"/>
+                <dxg:GridColumn FieldName="PercentageDistance" IsSmart="True" Header="% Diff" Width="50">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="p0" DisplayFormat="p0"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+    </Grid>
+</UserControl>
