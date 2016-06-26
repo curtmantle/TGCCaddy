@@ -10,7 +10,6 @@ using TGCCaddy.Model;
 
 namespace TGCCaddy.ViewModel
 {
-
     public class CalculatorViewModel : ViewModelBase
     {
         private IShotCalculator shotCalculator;
@@ -18,12 +17,14 @@ namespace TGCCaddy.ViewModel
         private IList<IClub> clubs;
 
         private DelegateCommand calculateCommand;
+        private DelegateCommand newCommand;
         private int distance;
         private int roll;
         private IWindAdjusterFactory windAdjusterFactory;
         private double liePercent;
         private int targetDistance;
         private bool useWindElevation;
+        private bool isDistanceFocused;
 
         public CalculatorViewModel()
         {
@@ -31,6 +32,7 @@ namespace TGCCaddy.ViewModel
             CreateWindFactory();
             CreateCalculator();
             LiePercent = 1;
+            this.IsDistanceFocused = true;
         }
 
         public CalculatorViewModel(IShotCalculator calculator)
@@ -154,6 +156,16 @@ namespace TGCCaddy.ViewModel
             }
         }
 
+        public bool IsDistanceFocused
+        {
+            get { return isDistanceFocused; }
+            set
+            {
+                isDistanceFocused = value;
+                RaisePropertyChanged(()=>IsDistanceFocused);
+            }
+        }
+
         /// <summary>
         /// Gets the results of the latest calculation
         /// </summary>
@@ -173,6 +185,23 @@ namespace TGCCaddy.ViewModel
         public DelegateCommand CalculateCommand
         {
             get { return this.calculateCommand ?? (this.calculateCommand = new DelegateCommand(Calculate)); }
+        }
+
+        public DelegateCommand NewCommand
+        {
+            get { return newCommand ?? (this.newCommand = new DelegateCommand(NewCalculation)); }
+        }
+
+        private void NewCalculation()
+        {
+            this.Distance = 0;
+            this.Elevation = 0;
+            this.Roll = 0;
+            this.WindDirection = 0;
+            this.WindSpeed = 0;
+            this.LiePercent = 1;
+            this.IsDistanceFocused = true;
+
         }
 
         /// <summary>
@@ -214,6 +243,8 @@ namespace TGCCaddy.ViewModel
             this.Results = new ObservableCollection<IShotResult>(result);
 
             this.LiePercent = 1;
+
+            this.IsDistanceFocused = true;
         }
 
         /// <summary>

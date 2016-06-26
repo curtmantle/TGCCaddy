@@ -11,8 +11,6 @@ namespace TGCCaddyTests
         private Mock<IClub> lobWedge;
         private Mock<IClub> sandWedge;
         private Mock<ITargetDistanceCalculator> distanceCalculator;
-        private Mock<IWindAdjusterFactory> windAdjusterFactory;
-        private Mock<IWindAdjuster> windAdjuster;
 
         [TestInitialize]
         public void Setup()

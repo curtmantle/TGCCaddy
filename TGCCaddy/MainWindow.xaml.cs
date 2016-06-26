@@ -21,14 +21,12 @@ namespace TGCCaddy
     /// </summary>
     public partial class MainWindow : DevExpress.Xpf.Core.DXWindow
     {
-        private CalculatorViewModel vm;
-        private ElevationWindTestViewModel windTest;
+        private MainWindowViewModel vm;
+
         public MainWindow()
         {
             InitializeComponent();
-            this.windTest = new ElevationWindTestViewModel();
-            this.vm = new CalculatorViewModel();
-
+            vm = new MainWindowViewModel();
             this.DataContext = vm;
         }
     }

@@ -6,6 +6,7 @@
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:model="clr-namespace:TGCCaddy.Model"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:attachedBehavior="clr-namespace:TGCCaddy.View.AttachedBehavior"
              x:Class="TGCCaddy.View.CalculatorView" 
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="800"
@@ -34,7 +35,8 @@
                                           MaxValue="500" 
                                           MinValue="0" 
                                           Mask="n0" 
-                                          MaskUseAsDisplayFormat="True"/>
+                                          MaskUseAsDisplayFormat="True"
+                                          attachedBehavior:FocusExtension.IsFocused ="{Binding IsDistanceFocused, Mode=TwoWay}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Elevation">
                             <dxe:SpinEdit EditValue="{Binding Elevation, Mode=TwoWay}"
@@ -46,6 +48,7 @@
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Roll">
                             <dxe:SpinEdit EditValue="{Binding Roll, Mode=TwoWay}"
+                                          EditValueType="{x:Type system:Int32}"
                                           MaxValue="999"
                                           MinValue="-999"
                                           Mask="n0"
@@ -65,6 +68,7 @@
                                           MaxValue="59"
                                           MinValue="0"
                                           Mask="n0"
+                                          Increment="5"
                                           MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Lie Percent">
@@ -72,6 +76,7 @@
                                           MaxValue="1"
                                           MinValue="0" 
                                           Mask="p0"
+                                          Increment="0.01"
                                           MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
